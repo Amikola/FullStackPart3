@@ -17,8 +17,24 @@ mongoose.connect(url)
   })
 
 const peopleSchema = new mongoose.Schema({
-    name: String,
-    number: String,
+    name: { 
+      type: String,
+      minlength: 3, 
+      require: true,},
+    number: { 
+      type: String,
+      minlength: 8, 
+      require: true,
+      validate: {
+        validator: function(arr) {
+          return arr.split("-").length === 2 &&  
+          (arr.split("-")[0].length === 2  || arr.split("-")[0].length === 3) &&
+          (arr.split("-")[0].match(/^[0-9]+$/) != null && arr.split("-")[1].match(/^[0-9]+$/) != null   )
+        },
+        message: "Must have one - (rest are numbers) symbol and first part be 2 or 3 numbers long"
+    
+    
+    }, }
   })
 
 peopleSchema.set('toJSON', {
